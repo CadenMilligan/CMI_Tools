@@ -1,0 +1,49 @@
+-- CMI Tools
+-- Permission is hereby granted, free of charge, to any person obtaining a copy of
+-- this software and associated documentation files (the "Software"), to deal in
+-- the Software without restriction, including without limitation the rights to
+-- use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+-- of the Software, and to permit persons to whom the Software is furnished to do
+-- so, subject to the following conditions:
+--
+-- The above copyright notice and this permission notice shall be included in all
+-- copies or substantial portions of the Software.
+--
+-- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+-- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+-- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+-- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+-- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+-- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+-- SOFTWARE.
+--
+
+local socket = require("socket")
+
+---------------------------------------CMI Tools: Ping IP v01---------------------------------------
+
+local function ping(ipAddress, pingCount, timeoutSeconds)
+    for i = 1, pingCount do
+        local pingCommand = string.format("ping -c 1 -W %d %s", timeoutSeconds, ipAddress)
+        -- Capture all return values from os.execute
+        local success, exitType, exitCode = os.execute(pingCommand)
+
+        -- Check if the command was successful based on the exit code
+        if success and exitCode == 0 then
+            Printf(string.format("Ping %d to %s: Success", i, ipAddress))
+        else
+            Printf(string.format("Ping %d to %s: Failed", i, ipAddress))
+        end
+
+        socket.sleep(1) -- Sleep for 0.5 seconds between pings for network etiquette
+    end
+end
+
+------------------------------------------------MAIN------------------------------------------------
+
+local function main()
+    Printf("Script started") -- Debug print
+    ping("127.0.0.1", 4, 1)
+end
+
+return main
